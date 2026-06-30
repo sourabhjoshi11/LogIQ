@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────
-// LogIQ — API Client
+// LogLens — API Client
 // ─────────────────────────────────────────────
 
 import type { ParseResult, AIResponse, LogEvent } from '../types'

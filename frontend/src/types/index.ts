@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────
-// LogIQ — Shared TypeScript Types
+// LogLens — Shared TypeScript Types
 // ─────────────────────────────────────────────
 
 export type LogLevel =

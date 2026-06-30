@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────
-// LogIQ — Global State (Zustand)
+// LogLens — Global State (Zustand)
 // ─────────────────────────────────────────────
 
 import { create } from 'zustand'

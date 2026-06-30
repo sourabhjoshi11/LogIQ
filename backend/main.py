@@ -881,7 +881,7 @@ def build_timeline(events: list[LogEvent]) -> list[dict[str, Any]]:
 # ─────────────────────────────────────────────
 
 ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
-GROQ_API_URL = "https://api.groq.com/openai/v1/responses"
+GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 def build_ai_prompt(events: list[LogEvent], user_query: str) -> str:
     """Build a tight, focused prompt — only send relevant events to the AI."""
@@ -954,30 +954,30 @@ async def call_anthropic(prompt: str, api_key: str) -> AIResponse:
     return AIResponse(**parsed)
 
 
-def _extract_groq_text(value: Any) -> str | None:
-    if value is None:
-        return None
-    if isinstance(value, str):
-        return value.strip()
-    if isinstance(value, dict):
-        for key in ("output", "text", "content", "message", "response", "result", "generated_text"):
-            if key in value:
-                extracted = _extract_groq_text(value[key])
-                if extracted:
-                    return extracted
-        for item in value.values():
-            extracted = _extract_groq_text(item)
-            if extracted:
-                return extracted
-        return None
-    if isinstance(value, list):
-        parts: list[str] = []
-        for item in value:
-            extracted = _extract_groq_text(item)
-            if extracted:
-                parts.append(extracted)
-        return "\n".join(parts).strip() if parts else None
-    return None
+# def _extract_groq_text(value: Any) -> str | None:
+#     if value is None:
+#         return None
+#     if isinstance(value, str):
+#         return value.strip()
+#     if isinstance(value, dict):
+#         for key in ("output", "text", "content", "message", "response", "result", "generated_text"):
+#             if key in value:
+#                 extracted = _extract_groq_text(value[key])
+#                 if extracted:
+#                     return extracted
+#         for item in value.values():
+#             extracted = _extract_groq_text(item)
+#             if extracted:
+#                 return extracted
+#         return None
+#     if isinstance(value, list):
+#         parts: list[str] = []
+#         for item in value:
+#             extracted = _extract_groq_text(item)
+#             if extracted:
+#                 parts.append(extracted)
+#         return "\n".join(parts).strip() if parts else None
+#     return None
 
 
 async def call_groq(prompt: str, api_key: str) -> AIResponse:
@@ -986,32 +986,26 @@ async def call_groq(prompt: str, api_key: str) -> AIResponse:
 
     headers = {
         "Content-Type": "application/json",
-        "Accept": "application/json",
         "Authorization": f"Bearer {api_key}",
-        "User-Agent": "LogIQ/1.0",
     }
     payload = {
         "model": GROQ_MODEL,
-        "input": prompt,
-        "max_output_tokens": 1024,
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": 1024,
     }
-    url = GROQ_API_URL
 
     async with httpx.AsyncClient(timeout=30.0) as client:
-        resp = await client.post(url, json=payload, headers=headers)
+        resp = await client.post(GROQ_API_URL, json=payload, headers=headers)
         resp.raise_for_status()
         data = resp.json()
 
-    text = None
-    if isinstance(data, dict):
-        text = _extract_groq_text(data.get("outputs"))
-        if not text:
-            text = _extract_groq_text(data.get("output"))
-        if not text:
-            text = _extract_groq_text(data)
-
-    if not isinstance(text, str) or not text.strip():
+    try:
+        text = data["choices"][0]["message"]["content"].strip()
+    except (KeyError, IndexError, TypeError):
         raise HTTPException(502, f"Groq returned malformed response: {json.dumps(data)[:400]}")
+
+    if not text:
+        raise HTTPException(502, "Groq returned an empty response.")
 
     text = re.sub(r'^```(?:json)?\s*', '', text)
     text = re.sub(r'\s*```$', '', text)
@@ -1019,13 +1013,12 @@ async def call_groq(prompt: str, api_key: str) -> AIResponse:
     parsed = json.loads(text)
     return AIResponse(**parsed)
 
-
 # ─────────────────────────────────────────────
 # FastAPI Application
 # ─────────────────────────────────────────────
 
 app = FastAPI(
-    title       = "LogIQ API",
+    title       = "LogLens API",
     description = "AI-Powered Log Intelligence Platform",
     version     = "1.0.0",
 )

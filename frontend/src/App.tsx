@@ -155,7 +155,7 @@ function LandingScreen() {
           Understand any log file in seconds
         </h1>
         <p className="mx-auto max-w-md text-sm leading-relaxed text-slate-400">
-          Paste or upload your logs. LogIQ auto-detects the format, extracts structured events,
+          Paste or upload your logs. LogLens auto-detects the format, extracts structured events,
           builds a timeline, and lets you ask AI to explain root causes.
         </p>
       </div>
@@ -263,7 +263,10 @@ export function App() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-          <span className="text-sm font-semibold text-slate-100">LogIQ</span>
+          <div className="flex items-center gap-2">
+            <img src="/logo.svg" alt="LogLens" className="h-6 w-6 rounded-md bg-slate-900/70 p-1" />
+            <span className="text-sm font-semibold text-slate-100">LogLens</span>
+          </div>
         </div>
 
         <ErrorBoundary>

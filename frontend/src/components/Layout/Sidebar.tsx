@@ -44,21 +44,9 @@ export function Sidebar({ onClose }: SidebarProps) {
     <aside className="flex h-full w-48 flex-col border-r border-slate-800/80 bg-slate-950/95 backdrop-blur">
       <div className="flex items-center justify-between border-b border-slate-800/80 px-4 py-4">
         <div className="flex items-center gap-2">
-          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-indigo-500 to-violet-600 shadow-[0_0_24px_rgba(99,102,241,0.25)]">
-            <svg className="h-3.5 w-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          <span className="text-sm font-semibold tracking-tight text-slate-100">LogIQ</span>
+          <img src="/logo.svg" alt="LogLens" className="h-8 w-8 rounded-md bg-slate-900/70 p-1" />
+          <span className="text-sm font-semibold tracking-tight text-slate-100">LogLens</span>
         </div>
-
-        {onClose && (
-          <button onClick={onClose} className="text-slate-500 hover:text-slate-300 md:hidden">
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        )}
       </div>
 
       <nav className="flex-1 space-y-0.5 px-2 py-3">

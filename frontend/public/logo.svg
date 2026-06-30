@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 120" fill="none">
+  <defs>
+    <linearGradient id="logo-gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(12 12)">
+    <circle cx="54" cy="54" r="42" stroke="url(#logo-gradient)" stroke-width="14" fill="none" stroke-linecap="round" />
+    <path d="M35 48h22M35 62h18M35 76h12" stroke="#0f172a" stroke-width="10" stroke-linecap="round" />
+    <path d="M82 82l28 28" stroke="#0f172a" stroke-width="14" stroke-linecap="round" />
+  </g>
+
+  <text x="142" y="76" font-family="Inter, sans-serif" font-size="48" font-weight="800" fill="#0f172a">log</text>
+  <text x="244" y="76" font-family="Inter, sans-serif" font-size="48" font-weight="800" fill="#6366f1">lens</text>
+</svg>
