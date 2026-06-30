@@ -1030,10 +1030,9 @@ app.add_middleware(
     allow_headers  = ["*"],
 )
 
-
 @app.get("/health")
 def health():
-    return {"status": "ok", "version": "1.0.0"}
+    return {"status": "ok", "version": "1.0.0", "cors_origins": FRONTEND_ORIGINS}
 
 
 @app.post("/api/parse", response_model=ParseResult)
